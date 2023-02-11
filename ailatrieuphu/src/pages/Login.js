@@ -3,6 +3,8 @@ import '../styles/Login.css'
 import triviaLogo from '../styles/images/logotrivia.png';
 import iconeTrybe from '../styles/images/iconetrybe.png';
 import PropTypes from 'prop-types';
+import {hanldeGetDataLogin} from '../redux/actions'
+import { connect } from 'react-redux';
 class Login extends React.Component {
   state = {
     name: '',
@@ -11,6 +13,9 @@ class Login extends React.Component {
   handleTypeInput = ({target}) => {
     const { value, name } = target;
     this.setState({[name] : value})
+  }
+  hanldeLogin = async () => {
+    await this.props.dispatch(hanldeGetDataLogin(this.state))
   }
   render() {
     const {name, email} = this.state;
@@ -36,6 +41,7 @@ class Login extends React.Component {
           </input>
           <button
           type='button'
+          onClick={this.hanldeLogin}
           >
             Play
           </button>
@@ -50,4 +56,10 @@ class Login extends React.Component {
     )
   }
 }
-export default Login
+const mapDispatchToProps = dispatch => ({
+  dispatch
+})
+const mapStateToProps = state => ({
+  nameData: state.player.name
+})
+export default connect(mapStateToProps, mapDispatchToProps)(Login)
