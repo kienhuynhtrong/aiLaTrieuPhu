@@ -5,6 +5,7 @@ import iconeTrybe from '../styles/images/iconetrybe.png';
 import PropTypes from 'prop-types';
 import {hanldeGetDataLogin} from '../redux/actions'
 import { connect } from 'react-redux';
+import requestUserToken from '../helper/api'
 class Login extends React.Component {
   state = {
     name: '',
@@ -15,7 +16,12 @@ class Login extends React.Component {
     this.setState({[name] : value})
   }
   hanldeLogin = async () => {
+    const userToken = await requestUserToken();
+    localStorage.setItem('token', userToken);
     await this.props.dispatch(hanldeGetDataLogin(this.state))
+    this.props.history.push('/game');
+    console.log('chay tai day')
+
   }
   render() {
     const {name, email} = this.state;
@@ -56,6 +62,12 @@ class Login extends React.Component {
     )
   }
 }
+Login.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  history: PropTypes.shape({
+    push: PropTypes.func.isRequired,
+  }).isRequired,
+};
 const mapDispatchToProps = dispatch => ({
   dispatch
 })
